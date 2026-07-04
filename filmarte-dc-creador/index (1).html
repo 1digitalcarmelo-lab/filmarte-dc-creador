@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FILMARTE · DC · CREADOR</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Estrellas -->
+<div class="stars" id="stars"></div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo">FILMARTE<span class="dot">·</span><span class="dc">DC</span><span class="dot">·</span><span class="cr">CREADOR</span></div>
+  <div class="badge-new">✦ GENERADOR DE MINI APPS</div>
+  <div class="hero-title">Creá tu <span>mini app interactiva</span><br>sin saber programar</div>
+  <div class="hero-sub">Completá los pasos, copiá tu Prompt del Inventor y pegalo en Claude.ai. En minutos tenés tu app lista para vender.</div>
+  <div class="uses-badge"><span class="uses-dot"></span><span id="uses-txt">2 generaciones gratuitas disponibles</span></div>
+</div>
+
+<!-- PASO 1 -->
+<div class="step">
+  <div class="step-hd"><div class="step-n">1</div><div class="step-t">Sobre tu app</div></div>
+  <label class="lbl">¿Cómo se llama tu mini app?</label>
+  <input type="text" class="inp" id="nombre" placeholder="Ej: Guía de Recetas Saludables">
+  <label class="lbl">¿De qué trata y para quién es?</label>
+  <textarea class="inp" id="tema" placeholder="Ej: Una app de recetas para emprendedoras que venden comida desde casa. Incluye menú semanal y lista de compras."></textarea>
+  <label class="lbl">¿Algo más que quieras incluir? (opcional)</label>
+  <textarea class="inp" id="extra" placeholder="Ej: Sección de testimonios, formulario de contacto." style="min-height:46px"></textarea>
+  <div class="div" style="margin:4px 0 14px"></div>
+  <label class="lbl">Subí tu ebook o documento en PDF (opcional — el prompt será mucho más personalizado)</label>
+  <div class="pdf-drop" id="pdf-drop">
+    <input type="file" id="pdf-in" accept=".pdf" onchange="handlePDF(this)">
+    <div class="pdf-ico">📄</div>
+    <div class="pdf-t">Arrastrá tu PDF acá o <strong>tocá para elegirlo</strong></div>
+    <div class="pdf-t" style="font-size:10px;margin-top:3px">Se lee en tu navegador · no se sube a ningún servidor</div>
+    <div class="pdf-fn" id="pdf-fn"></div>
+  </div>
+  <div class="pdf-or">— o describilo a mano arriba —</div>
+</div>
+
+<!-- PASO 2 -->
+<div class="step">
+  <div class="step-hd"><div class="step-n">2</div><div class="step-t">¿Cuál es tu nicho?</div></div>
+  <div class="grid3" id="nicho">
+    <button class="opt" data-v="recetas y cocina"><span class="oi">🍳</span>Recetas</button>
+    <button class="opt" data-v="fitness y entrenamiento"><span class="oi">💪</span>Fitness</button>
+    <button class="opt" data-v="finanzas y emprendimiento"><span class="oi">💰</span>Finanzas</button>
+    <button class="opt" data-v="bienestar y salud"><span class="oi">🌿</span>Bienestar</button>
+    <button class="opt" data-v="marketing digital y ventas por Instagram"><span class="oi">📱</span>Marketing</button>
+    <button class="opt" data-v="educación y estudio"><span class="oi">📚</span>Estudio</button>
+    <button class="opt" data-v="relaciones y autoconocimiento"><span class="oi">❤️</span>Relaciones</button>
+    <button class="opt" data-v="creatividad y contenido digital"><span class="oi">🎨</span>Creatividad</button>
+    <button class="opt on" data-v="otro"><span class="oi">✏️</span>Otro</button>
+  </div>
+</div>
+
+<!-- PASO 3 -->
+<div class="step">
+  <div class="step-hd"><div class="step-n">3</div><div class="step-t">¿Con qué tono?</div></div>
+  <div class="grid2" id="tono">
+    <button class="opt on" data-v="Motivacional y directo">Motivacional y directo</button>
+    <button class="opt" data-v="Cálido y compasivo">Cálido y compasivo</button>
+    <button class="opt" data-v="Profesional y confiable">Profesional y confiable</button>
+    <button class="opt" data-v="Reflexivo y profundo">Reflexivo y profundo</button>
+    <button class="opt" data-v="Científico y accesible">Científico y accesible</button>
+    <button class="opt" data-v="Energético y desafiante">Energético y desafiante</button>
+  </div>
+</div>
+
+<!-- PASO 4 -->
+<div class="step">
+  <div class="step-hd"><div class="step-n">4</div><div class="step-t">¿Qué incluye?</div><div class="step-s">Activá lo que querés</div></div>
+  <div class="tog-list" id="toggles">
+    <div class="tog-row on"><label class="tl"><b>Asistente IA</b><small>Chat con IA que responde preguntas del tema</small></label><label class="sw"><input type="checkbox" checked data-fn="Un chat de IA donde el usuario hace preguntas del tema. Campo para ingresar API key de Claude. Endpoint https://api.anthropic.com/v1/messages, headers: anthropic-version 2023-06-01, anthropic-dangerous-direct-browser-access true. Modelo: claude-sonnet-4-6."><span class="sl"></span></label></div>
+    <div class="tog-row on"><label class="tl"><b>Lectura por secciones</b><small>Contenido organizado con navegación</small></label><label class="sw"><input type="checkbox" checked data-fn="Contenido en secciones navegables con tabs o menú."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Quiz / Trivia</b><small>Preguntas con puntaje y resultado</small></label><label class="sw"><input type="checkbox" data-fn="Quiz de opción múltiple con puntaje y resultado personalizado."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Test con resultado</b><small>Test de perfil personalizado</small></label><label class="sw"><input type="checkbox" data-fn="Test donde el usuario responde y recibe un perfil o resultado personalizado."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Calculadora</b><small>Calcula precios, porciones, rentabilidad</small></label><label class="sw"><input type="checkbox" data-fn="Calculadora interactiva relevante al tema."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Checklist interactivo</b><small>Tareas con progreso guardado</small></label><label class="sw"><input type="checkbox" data-fn="Checklist con progreso en localStorage."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Tarjetas de conceptos</b><small>Ideas clave expandibles</small></label><label class="sw"><input type="checkbox" data-fn="Tarjetas de conceptos que se expanden al tocarlas."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Ruleta interactiva</b><small>Gira y da frases, retos o premios</small></label><label class="sw"><input type="checkbox" data-fn="Ruleta animada con frases, retos o premios del tema."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Tracker de progreso</b><small>Registra avances día a día</small></label><label class="sw"><input type="checkbox" data-fn="Tracker de progreso diario en localStorage."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Logros y medallas</b><small>Sistema de recompensas desbloqueables</small></label><label class="sw"><input type="checkbox" data-fn="Logros y medallas desbloqueables en localStorage."><span class="sl"></span></label></div>
+    <div class="tog-row"><label class="tl"><b>Modo noche / día</b><small>Botón para cambiar el tema visual</small></label><label class="sw"><input type="checkbox" data-fn="Botón para alternar modo oscuro y claro."><span class="sl"></span></label></div>
+  </div>
+</div>
+
+<!-- PASO 5 -->
+<div class="step">
+  <div class="step-hd"><div class="step-n">5</div><div class="step-t">Estilo visual</div></div>
+  <label class="lbl">Nombre de tu marca (aparece al pie de la app)</label>
+  <input type="text" class="inp" id="marca" placeholder="Ej: Cocina con Marta">
+  <label class="lbl">Colores de tu marca</label>
+  <div class="color-row">
+    <div class="color-item"><span>Principal</span><input type="color" class="cp" id="c1" value="#0B1D3A"></div>
+    <div class="color-item"><span>Acento</span><input type="color" class="cp" id="c2" value="#00C8FF"></div>
+  </div>
+</div>
+
+<button class="gen" onclick="generar()">✦ Generar mi Prompt del Inventor</button>
+
+<!-- PAYWALL -->
+<div class="paywall" id="paywall">
+  <div class="paywall-ico">🚀</div>
+  <h3>Agotaste tus 2 generaciones gratuitas</h3>
+  <p>Para seguir creando mini apps ilimitadas y para siempre, conseguí tu acceso completo a <strong style="color:var(--gold)">FILMARTE · DC · CREADOR</strong>.</p>
+  <a href="https://wa.me/5491165671459?text=Hola!%20Quiero%20el%20acceso%20completo%20a%20FILMARTE%20DC%20CREADOR" target="_blank" class="paywall-btn">Quiero el acceso completo →</a>
+</div>
+
+<!-- OUTPUT -->
+<div class="output" id="output">
+  <div class="out-t">✓ Tu prompt está listo</div>
+  <div class="out-s">Copiá este prompt y pegalo en Claude.ai — en minutos tenés tu mini app completa.</div>
+  <div class="pbox"><p id="prompt-txt"></p></div>
+  <div class="act-btns">
+    <button onclick="copiar()">📋 Copiar prompt</button>
+    <button class="pri" onclick="window.open('https://claude.ai','_blank')">Abrir Claude.ai ↗</button>
+  </div>
+  <div class="next">
+    <p>1. Copiá el prompt de arriba<br>2. Abrí Claude.ai (gratis)<br>3. Pegá el prompt y envialo<br>4. Claude genera el HTML de tu app<br>5. Descargá el archivo .html<br>6. Subilo a Netlify Drop → en 30 segundos tenés tu link listo</p>
+  </div>
+</div>
+
+<div class="foot">FILMARTE · DC · CREADOR &nbsp;·&nbsp; <strong>Filmarte Audiovisuales</strong> &amp; Digital Carmelo</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
