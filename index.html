@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini App Dulzura</title>
+  <meta name="description" content="Una mini app personalizada creada con amor." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <section id="welcome" class="screen welcome-screen active">
+      <div class="big-bg-heart heart-one">♡</div>
+      <div class="big-bg-heart heart-two">♡</div>
+      <div class="floating-hearts" aria-hidden="true"></div>
+
+      <div class="welcome-card">
+        <p class="eyebrow" id="welcomeEyebrow">Mini App Dulzura</p>
+        <h1 id="welcomeTitle">Una sorpresa para vos</h1>
+        <p id="welcomeSubtitle">Abrí esta mini experiencia hecha con fotos, música y mucho amor.</p>
+        <button id="startBtn" class="primary-btn">Tocar para empezar 💞</button>
+        <p class="music-hint">La música empieza después de tocar el botón.</p>
+      </div>
+    </section>
+
+    <main id="experience" class="experience hidden">
+      <header class="topbar">
+        <div class="topbar-title">
+          <p class="tiny-label">Mini App Dulzura</p>
+          <h2 id="namesTitle">Caro & Alexis</h2>
+        </div>
+        <button id="musicBtn" class="icon-btn" aria-label="Pausar o reproducir música">♪</button>
+      </header>
+
+      <section class="hero">
+        <div class="hero-photo-wrap">
+          <img id="heroPhoto" class="hero-photo" src="" alt="Foto principal" />
+          <div id="heroFallback" class="photo-fallback hidden">Foto principal</div>
+        </div>
+
+        <div class="hero-text">
+          <p id="heroKicker" class="eyebrow">Hecho especialmente</p>
+          <h1 id="heroTitle">Caro & Alexis</h1>
+          <p id="heroPhrase" class="hero-lead">Hay momentos que parecen simples, pero después se vuelven eternos.</p>
+          <p id="brandPhrase" class="brand-phrase">Lo lindo también puede vivir en un link.</p>
+        </div>
+      </section>
+
+      <section class="album-section">
+        <div class="section-heading">
+          <p class="eyebrow">Recorrido</p>
+          <h2>Una mini historia en fotos</h2>
+          <p class="section-subtitle">Un recorrido suave por esos instantes que merecen quedarse cerquita.</p>
+        </div>
+
+        <article class="album-card">
+          <div class="album-photo-frame">
+            <img id="currentPhoto" src="" alt="Foto del álbum" />
+            <div id="currentPhotoFallback" class="photo-fallback hidden">Foto</div>
+          </div>
+
+          <div class="album-copy">
+            <p id="photoCounter" class="counter">1 / 5</p>
+            <h3 id="photoTitle">Un recuerdo lindo</h3>
+            <p id="photoPhrase">Algunas fotos no necesitan explicación.</p>
+          </div>
+
+          <div class="album-controls">
+            <button id="prevBtn" class="secondary-btn">← Anterior</button>
+            <button id="nextBtn" class="secondary-btn">Siguiente →</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="memory-strip-section">
+        <div class="section-heading">
+          <p class="eyebrow">Detalles</p>
+          <h2>Pequeñas postales</h2>
+          <p class="section-subtitle">Otros pedacitos de esta historia, para mirar despacio.</p>
+        </div>
+        <div id="memoryStrip" class="memory-strip"></div>
+      </section>
+
+      <section class="poem-section">
+        <div class="poem-card">
+          <p class="eyebrow">Semana de la Dulzura</p>
+          <h2>La dulzura</h2>
+          <div id="poemText" class="poem-text"></div>
+        </div>
+      </section>
+
+      <section class="quotes-section">
+        <div class="section-heading">
+          <p class="eyebrow">Frases</p>
+          <h2>Un rincón de palabras</h2>
+          <p class="section-subtitle">Porque la dulzura no siempre viene en caramelos.</p>
+        </div>
+        <div id="quotesGrid" class="quotes-grid"></div>
+      </section>
+
+      <section class="gallery-section">
+        <div class="section-heading">
+          <p class="eyebrow">Galería completa</p>
+          <h2>Todos los recuerdos</h2>
+          <p class="section-subtitle">Acá quedan todas las fotos juntas, para volver cuando quieras.</p>
+        </div>
+        <div id="galleryGrid" class="gallery-grid"></div>
+      </section>
+
+      <section class="messages-section">
+        <div class="section-heading">
+          <p class="eyebrow">Detalles dulces</p>
+          <h2>Un poquito más de esta historia</h2>
+        </div>
+        <div id="messagesGrid" class="messages-grid"></div>
+      </section>
+
+      <section class="surprise-section">
+        <div class="surprise-card">
+          <p class="eyebrow">Final sorpresa</p>
+          <h2>Hay algo más para vos 🎁</h2>
+          <button id="surpriseBtn" class="primary-btn">Abrir sorpresa</button>
+          <div id="surpriseMessage" class="surprise-message hidden"></div>
+          <a id="whatsappBtn" class="whatsapp-btn hidden" target="_blank" rel="noopener">Responder por WhatsApp</a>
+        </div>
+      </section>
+
+      <footer id="brandFooter" class="footer">
+        Lo lindo también puede vivir en un link. <br />
+        Realizado con amor por Filmarte Audiovisuales · Escuela Creativa Filmarte · Digital Carmelo 💙
+      </footer>
+    </main>
+
+    <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
+      <button id="closeLightbox" class="close-btn" aria-label="Cerrar">×</button>
+      <img id="lightboxImg" src="" alt="Foto ampliada" />
+      <p id="lightboxCaption"></p>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <audio id="bgMusic" loop preload="auto"></audio>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
