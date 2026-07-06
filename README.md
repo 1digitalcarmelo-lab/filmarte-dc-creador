@@ -1,4 +1,4 @@
-# Mini App Dulzura v4
+# Mini App Dulzura 
 
 Cambios:
 - Pequeñas postales ya no fuerza recorte: usa altura natural.
