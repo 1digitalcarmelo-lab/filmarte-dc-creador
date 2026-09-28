@@ -1,147 +1,626 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mini App Dulzura</title>
-  <meta name="description" content="Una mini app personalizada creada con amor." />
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>FILMARTE · DC · VENTAS — Generador de Mini Apps V2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#040C18;--bg2:#071428;--card:#0A1E3C;--card2:#0E2548;
+  --cyan:#00D4FF;--gold:#C9A84C;--white:#FFFFFF;--text:#E8F4FF;--muted:#83AFCB;
+  --border:rgba(0,212,255,.20);--border2:rgba(0,212,255,.42);--active:rgba(0,212,255,.13);
+  --green:#00E5A0;--pink:#FF7BA7;--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 15% 35%,rgba(0,90,210,.20),transparent 55%),radial-gradient(ellipse at 85% 15%,rgba(0,180,255,.12),transparent 45%),radial-gradient(ellipse at 55% 90%,rgba(120,50,200,.08),transparent 45%)}
+button,input,select,textarea{font:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.pdf-drop:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.wrap{max-width:700px;margin:0 auto;padding:1.3rem 1rem 3rem;position:relative;z-index:1}
+.hero{text-align:center;padding:2rem 1.35rem;background:linear-gradient(180deg,#0A1E3C,#071428);border:1px solid var(--border2);border-radius:20px;margin-bottom:1rem;box-shadow:0 0 60px rgba(0,212,255,.16)}
+.logo{font-size:clamp(18px,5vw,23px);font-weight:700;letter-spacing:4px;margin-bottom:8px}.logo .dc{color:var(--cyan)}.logo .ventas{color:var(--gold)}
+.badge{display:inline-block;background:linear-gradient(135deg,var(--cyan),#0090CC);color:var(--bg);font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;margin-bottom:12px}
+.hero h1{font-size:clamp(22px,5.5vw,31px);line-height:1.16;margin-bottom:9px}.hero h1 span{color:var(--cyan)}
+.hero p{font-size:14px;color:#B1D0E3;line-height:1.6;max-width:560px;margin:0 auto}.ok{display:inline-block;margin-top:14px;padding:7px 13px;border-radius:20px;border:1px solid rgba(0,229,160,.30);background:rgba(0,229,160,.10);color:var(--green);font-size:13px}
+.step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:9px;box-shadow:0 4px 20px rgba(0,0,0,.28)}
+.step-hd{display:flex;align-items:center;gap:10px;margin-bottom:1rem}.step-n{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--cyan),#0090CC);color:var(--bg);font-weight:700;flex:0 0 auto}.step-t{font-size:16px;font-weight:600}
+.lbl{font-size:13px;color:#B1D0E3;display:block;margin-bottom:5px}.inp{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;color:var(--white);font-size:16px;margin-bottom:11px;outline:none}.inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,212,255,.08)}textarea.inp{min-height:78px;resize:vertical}.hint{font-size:12px;color:#91B8D0;line-height:1.55;margin:-4px 0 10px}.hard{padding:10px 12px;border:1px solid rgba(201,168,76,.28);border-radius:9px;background:rgba(201,168,76,.07);color:#ECDDAE;font-size:12px;line-height:1.55;margin-bottom:12px}
+.pdf-drop{display:block;position:relative;text-align:center;border:1.5px dashed rgba(0,212,255,.38);border-radius:10px;padding:19px;background:var(--bg2);margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}.pdf-drop.drag,.pdf-drop:hover{border-color:var(--cyan);background:var(--active)}.pdf-drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.pdf-icon{font-size:23px;margin-bottom:3px}.pdf-t{font-size:13px;color:var(--muted)}.pdf-t strong{color:var(--cyan)}.pdf-fn,.pdf-status{font-size:12px;margin-top:6px;min-height:16px}.pdf-fn{color:var(--cyan)}.pdf-status.loading{color:var(--gold)}.pdf-status.done{color:var(--green)}.pdf-status.error{color:var(--pink)}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.opt{min-height:48px;padding:10px 7px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);color:#B8D8EE;cursor:pointer;font-size:13px;font-weight:500;line-height:1.3}.opt:hover{border-color:var(--border2)}.opt.on{border-color:var(--cyan);background:var(--active);color:var(--cyan);font-weight:600}.oi{display:block;font-size:20px;margin-bottom:4px}
+.tog-list{display:flex;flex-direction:column;gap:7px}.tog-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);cursor:pointer;min-height:58px}.tog-row.on{border-color:rgba(0,212,255,.42);background:var(--active)}.tog-copy{flex:1;min-width:0}.tog-copy b{font-size:13px;display:block;color:#fff}.tog-copy small{font-size:12px;color:#92BBD3;line-height:1.35}.sw{position:relative;width:40px;height:24px;flex:0 0 auto}.sw input{position:absolute;opacity:0;inset:0}.slider{position:absolute;inset:0;background:rgba(255,255,255,.09);border-radius:20px;pointer-events:none}.slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:.18s}.sw input:checked+.slider{background:rgba(0,212,255,.38)}.sw input:checked+.slider::before{transform:translateX(16px);background:var(--cyan)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.colors{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:10px}.color-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px}.color-line{display:flex;gap:8px;align-items:center}.cp{width:48px;height:42px;padding:2px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);flex:0 0 auto}.hex{min-width:0;margin:0}.summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.summary div{background:rgba(0,0,0,.16);border:1px solid var(--border);border-radius:9px;padding:9px 10px}.summary small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}.summary strong{font-size:12px;color:#fff;word-break:break-word}
+.gen{width:100%;min-height:54px;padding:15px;margin-top:1rem;background:linear-gradient(135deg,var(--cyan),#0095CC 60%,#005F99);color:var(--bg);border:0;border-radius:var(--radius);font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,212,255,.34)}.gen:hover{filter:brightness(1.05)}.gen:active{transform:translateY(1px)}
+.output{display:none;background:var(--bg2);border:1.5px solid var(--cyan);border-radius:var(--radius);padding:1.2rem;margin-top:1rem;box-shadow:0 0 35px rgba(0,212,255,.12)}.output.show{display:block}.out-t{font-weight:600;color:var(--cyan)}.out-s{font-size:13px;color:var(--muted);margin:5px 0 12px;line-height:1.5}.pbox{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px;max-height:280px;overflow:auto}.pbox pre{font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:break-word;color:#B8D8F0}.acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.acts button{flex:1 1 180px;min-height:46px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:#fff;cursor:pointer}.acts .pri{border-color:var(--cyan);color:var(--cyan);background:var(--active)}.copy-status{font-size:12px;color:var(--green);min-height:17px;margin-top:7px}.foot{text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+
+.auth-shell{max-width:460px;margin:0 auto;padding:2rem 1rem;position:relative;z-index:2}
+.auth-card{background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:1.35rem;box-shadow:0 16px 50px rgba(0,0,0,.35)}
+.auth-brand{text-align:center;margin-bottom:1.2rem}.auth-brand .logo{margin-bottom:6px}.auth-brand p{color:var(--muted);font-size:13px;line-height:1.5}
+.auth-title{font-size:21px;margin-bottom:5px}.auth-sub{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:14px}
+.auth-actions{display:flex;gap:8px;flex-wrap:wrap}.auth-actions button{flex:1 1 160px;min-height:46px;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:#fff;cursor:pointer}.auth-actions .primary{border:0;background:linear-gradient(135deg,var(--cyan),#0095CC);color:var(--bg);font-weight:700}
+.auth-msg{min-height:20px;margin-top:10px;font-size:12px;line-height:1.45;color:var(--muted)}.auth-msg.error{color:var(--pink)}.auth-msg.ok{color:var(--green)}
+.auth-link{border:0;background:none;color:var(--cyan);padding:6px 0;cursor:pointer;font-size:13px}
+.userbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,212,255,.07);border:1px solid var(--border);border-radius:10px;padding:9px 11px;margin-bottom:10px}.userbar span{font-size:12px;color:#B8D8EE;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.userbar button{border:1px solid var(--border);background:var(--bg2);color:#fff;border-radius:8px;padding:7px 10px;cursor:pointer;flex:0 0 auto}
+.access-card{border-color:rgba(255,123,167,.35)}.access-card h2{font-size:20px;margin-bottom:8px}.access-card p{color:var(--muted);font-size:13px;line-height:1.55}
+.busy{opacity:.62;pointer-events:none}
+
+@media(max-width:560px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.two,.colors,.summary{grid-template-columns:1fr}.wrap{padding-left:.8rem;padding-right:.8rem}.step{padding:1rem}}
+@media(max-width:360px){.grid2,.grid4{grid-template-columns:1fr}.acts{flex-direction:column}.acts button{flex-basis:auto}}
+</style>
 </head>
 <body>
-  <div class="app-shell">
-    <section id="welcome" class="screen welcome-screen active">
-      <div class="big-bg-heart heart-one">♡</div>
-      <div class="big-bg-heart heart-two">♡</div>
-      <div class="floating-hearts" aria-hidden="true"></div>
-
-      <div class="welcome-card">
-        <p class="eyebrow" id="welcomeEyebrow">Mini App Dulzura</p>
-        <h1 id="welcomeTitle">Una sorpresa para vos</h1>
-        <p id="welcomeSubtitle">Abrí esta mini experiencia hecha con fotos, música y mucho amor.</p>
-        <button id="startBtn" class="primary-btn">Tocar para empezar 💞</button>
-        <p class="music-hint">La música empieza después de tocar el botón.</p>
-      </div>
-    </section>
-
-    <main id="experience" class="experience hidden">
-      <header class="topbar">
-        <div class="topbar-title">
-          <p class="tiny-label">Mini App Dulzura</p>
-          <h2 id="namesTitle">Caro & Alexis</h2>
-        </div>
-        <button id="musicBtn" class="icon-btn" aria-label="Pausar o reproducir música">♪</button>
-      </header>
-
-      <section class="hero">
-        <div class="hero-photo-wrap">
-          <img id="heroPhoto" class="hero-photo" src="" alt="Foto principal" />
-          <div id="heroFallback" class="photo-fallback hidden">Foto principal</div>
-        </div>
-
-        <div class="hero-text">
-          <p id="heroKicker" class="eyebrow">Hecho especialmente</p>
-          <h1 id="heroTitle">Caro & Alexis</h1>
-          <p id="heroPhrase" class="hero-lead">Hay momentos que parecen simples, pero después se vuelven eternos.</p>
-          <p id="brandPhrase" class="brand-phrase">Lo lindo también puede vivir en un link.</p>
-        </div>
-      </section>
-
-      <section class="album-section">
-        <div class="section-heading">
-          <p class="eyebrow">Recorrido</p>
-          <h2>Una mini historia en fotos</h2>
-          <p class="section-subtitle">Un recorrido suave por esos instantes que merecen quedarse cerquita.</p>
-        </div>
-
-        <article class="album-card">
-          <div class="album-photo-frame">
-            <img id="currentPhoto" src="" alt="Foto del álbum" />
-            <div id="currentPhotoFallback" class="photo-fallback hidden">Foto</div>
-          </div>
-
-          <div class="album-copy">
-            <p id="photoCounter" class="counter">1 / 5</p>
-            <h3 id="photoTitle">Un recuerdo lindo</h3>
-            <p id="photoPhrase">Algunas fotos no necesitan explicación.</p>
-          </div>
-
-          <div class="album-controls">
-            <button id="prevBtn" class="secondary-btn">← Anterior</button>
-            <button id="nextBtn" class="secondary-btn">Siguiente →</button>
-          </div>
-        </article>
-      </section>
-
-      <section class="memory-strip-section">
-        <div class="section-heading">
-          <p class="eyebrow">Detalles</p>
-          <h2>Pequeñas postales</h2>
-          <p class="section-subtitle">Otros pedacitos de esta historia, para mirar despacio.</p>
-        </div>
-        <div id="memoryStrip" class="memory-strip"></div>
-      </section>
-
-      <section class="poem-section">
-        <div class="poem-card">
-          <p class="eyebrow">Semana de la Dulzura</p>
-          <h2>La dulzura</h2>
-          <div id="poemText" class="poem-text"></div>
-        </div>
-      </section>
-
-      <section class="quotes-section">
-        <div class="section-heading">
-          <p class="eyebrow">Frases</p>
-          <h2>Un rincón de palabras</h2>
-          <p class="section-subtitle">Porque la dulzura no siempre viene en caramelos.</p>
-        </div>
-        <div id="quotesGrid" class="quotes-grid"></div>
-      </section>
-
-      <section class="gallery-section">
-        <div class="section-heading">
-          <p class="eyebrow">Galería completa</p>
-          <h2>Todos los recuerdos</h2>
-          <p class="section-subtitle">Acá quedan todas las fotos juntas, para volver cuando quieras.</p>
-        </div>
-        <div id="galleryGrid" class="gallery-grid"></div>
-      </section>
-
-      <section class="messages-section">
-        <div class="section-heading">
-          <p class="eyebrow">Detalles dulces</p>
-          <h2>Un poquito más de esta historia</h2>
-        </div>
-        <div id="messagesGrid" class="messages-grid"></div>
-      </section>
-
-      <section class="surprise-section">
-        <div class="surprise-card">
-          <p class="eyebrow">Final sorpresa</p>
-          <h2>Hay algo más para vos 🎁</h2>
-          <button id="surpriseBtn" class="primary-btn">Abrir sorpresa</button>
-          <div id="surpriseMessage" class="surprise-message hidden"></div>
-          <a id="whatsappBtn" class="whatsapp-btn hidden" target="_blank" rel="noopener">Responder por WhatsApp</a>
-        </div>
-      </section>
-
-      <footer id="brandFooter" class="footer">
-        Lo lindo también puede vivir en un link. <br />
-        Realizado con amor por Filmarte Audiovisuales · Escuela Creativa Filmarte · Digital Carmelo 💙
-      </footer>
-    </main>
-
-    <div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true">
-      <button id="closeLightbox" class="close-btn" aria-label="Cerrar">×</button>
-      <img id="lightboxImg" src="" alt="Foto ampliada" />
-      <p id="lightboxCaption"></p>
+<div class="auth-shell" id="auth-shell">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="logo">FILMARTE <span class="dc">· DC ·</span> <span class="ventas">VENTAS</span></div>
+      <p>Acceso personal al Generador de Mini Apps</p>
     </div>
-
-    <div id="toast" class="toast hidden"></div>
-    <audio id="bgMusic" loop preload="auto"></audio>
+    <div id="login-panel">
+      <h1 class="auth-title">Ingresá a tu Generador</h1>
+      <p class="auth-sub">Usá el mismo email con el que recibiste tu acceso.</p>
+      <label class="lbl" for="auth-email">Email</label>
+      <input class="inp" id="auth-email" type="email" autocomplete="email" placeholder="tu@email.com">
+      <label class="lbl" for="auth-password">Contraseña</label>
+      <input class="inp" id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="Tu contraseña">
+      <div class="auth-actions"><button type="button" class="primary" id="btn-login">Ingresar</button></div>
+      <button type="button" class="auth-link" id="btn-forgot">Olvidé mi contraseña</button>
+      <div class="auth-msg" id="auth-msg" aria-live="polite"></div>
+    </div>
+    <div id="password-panel" hidden>
+      <h1 class="auth-title">Creá tu contraseña</h1>
+      <p class="auth-sub">Elegí una contraseña de al menos 8 caracteres para terminar de activar tu acceso.</p>
+      <label class="lbl" for="new-password">Nueva contraseña</label>
+      <input class="inp" id="new-password" type="password" autocomplete="new-password" minlength="8" placeholder="Mínimo 8 caracteres">
+      <label class="lbl" for="new-password-2">Repetila</label>
+      <input class="inp" id="new-password-2" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la contraseña">
+      <div class="auth-actions"><button type="button" class="primary" id="btn-set-password">Guardar contraseña</button></div>
+      <div class="auth-msg" id="password-msg" aria-live="polite"></div>
+    </div>
+    <div id="blocked-panel" class="access-card" hidden>
+      <h2>Acceso no activo</h2>
+      <p>Tu usuario existe, pero el acceso a este Generador no está activo. Si creés que es un error, contactanos por el canal donde realizaste la compra.</p>
+      <div class="auth-actions" style="margin-top:14px"><button type="button" id="btn-blocked-logout">Cerrar sesión</button></div>
+    </div>
   </div>
+</div>
+<div class="wrap" id="generator-app" hidden>
+  <div class="userbar"><span id="user-email"></span><button type="button" id="btn-logout">Cerrar sesión</button></div>
+  <header class="hero">
+    <div class="logo">FILMARTE <span class="dc">· DC ·</span> <span class="ventas">VENTAS</span></div>
+    <div class="badge">GENERADOR DE MINI APPS PARA VENDER · V2</div>
+    <h1>Tu contenido, convertido en una <span>Mini App que vende</span></h1>
+    <p>Idioma, variante regional, modo visual y colores quedan definidos como reglas técnicas obligatorias para evitar reinterpretaciones.</p>
+    <div class="ok">✓ Generaciones ilimitadas</div>
+  </header>
 
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <section class="step" aria-labelledby="paso1">
+    <div class="step-hd"><div class="step-n">1</div><h2 class="step-t" id="paso1">Sobre tu Mini App</h2></div>
+    <label class="lbl" for="nombre">¿Cómo se va a llamar?</label>
+    <input class="inp" id="nombre" type="text" maxlength="120" placeholder="Ej: Guía de Recetas Saludables">
+
+    <label class="lbl" for="pdf-in">Subí tu PDF (opcional, recomendado)</label>
+    <label class="pdf-drop" id="pdf-drop" for="pdf-in" tabindex="0" role="button" aria-describedby="pdf-help">
+      <input type="file" id="pdf-in" accept="application/pdf,.pdf">
+      <div class="pdf-icon">📄</div>
+      <div class="pdf-t"><strong>Tocá para elegirlo</strong> o arrastrá el PDF acá</div>
+      <div class="pdf-t" id="pdf-help" style="font-size:10px;margin-top:3px">El texto se procesa en tu navegador; no lo enviamos a un servidor propio.</div>
+      <div class="pdf-fn" id="pdf-fn" aria-live="polite"></div>
+      <div class="pdf-status" id="pdf-status" aria-live="polite"></div>
+    </label>
+
+    <label class="lbl" for="tema">¿De qué trata y para quién es?</label>
+    <textarea class="inp" id="tema" maxlength="4000" placeholder="Ej: Una guía práctica para emprendedoras que quieren ordenar sus finanzas."></textarea>
+    <div class="hint">Si el PDF tiene texto seleccionable, este campo se completa con un resumen inicial que después podés editar.</div>
+
+    <label class="lbl" for="extra">Pedido adicional (opcional)</label>
+    <textarea class="inp" id="extra" maxlength="3000" placeholder="Ej: Quiero un botón que lleve a mi Instagram, pero no inventes la URL si no te la doy."></textarea>
+  </section>
+
+  <section class="step" aria-labelledby="paso2">
+    <div class="step-hd"><div class="step-n">2</div><h2 class="step-t" id="paso2">Nicho</h2></div>
+    <div class="hint">Elegir un nicho propone una paleta inicial. Podés cambiar los HEX exactos después.</div>
+    <div class="grid4" id="nicho" role="group" aria-label="Elegir nicho">
+      <button type="button" class="opt" data-v="recetas y cocina" data-c1="#6B3F16" data-c2="#F4B942"><span class="oi">🍳</span>Recetas</button>
+      <button type="button" class="opt" data-v="fitness y entrenamiento" data-c1="#8A2525" data-c2="#FF5C5C"><span class="oi">💪</span>Fitness</button>
+      <button type="button" class="opt" data-v="finanzas y emprendimiento" data-c1="#145A3A" data-c2="#00B77A"><span class="oi">💰</span>Finanzas</button>
+      <button type="button" class="opt" data-v="bienestar y salud" data-c1="#286650" data-c2="#5EEFCC"><span class="oi">🌿</span>Bienestar</button>
+      <button type="button" class="opt" data-v="marketing digital y ventas" data-c1="#7A2449" data-c2="#FF6B9D"><span class="oi">📱</span>Marketing</button>
+      <button type="button" class="opt" data-v="educación y estudio" data-c1="#164A73" data-c2="#00C8FF"><span class="oi">📚</span>Estudio</button>
+      <button type="button" class="opt" data-v="relaciones y autoconocimiento" data-c1="#782B61" data-c2="#E879C2"><span class="oi">❤️</span>Relaciones</button>
+      <button type="button" class="opt on" data-v="otro" data-c1="#164A73" data-c2="#00C8FF" aria-pressed="true"><span class="oi">✏️</span>Otro</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="paso3">
+    <div class="step-hd"><div class="step-n">3</div><h2 class="step-t" id="paso3">Tono</h2></div>
+    <div class="grid2" id="tono" role="group" aria-label="Elegir tono">
+      <button type="button" class="opt on" data-v="Motivacional y directo" aria-pressed="true">Motivacional y directo</button>
+      <button type="button" class="opt" data-v="Cálido y compasivo">Cálido y compasivo</button>
+      <button type="button" class="opt" data-v="Profesional y confiable">Profesional y confiable</button>
+      <button type="button" class="opt" data-v="Reflexivo y profundo">Reflexivo y profundo</button>
+      <button type="button" class="opt" data-v="Científico y accesible">Científico y accesible</button>
+      <button type="button" class="opt" data-v="Energético y desafiante">Energético y desafiante</button>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="paso4">
+    <div class="step-hd"><div class="step-n">4</div><h2 class="step-t" id="paso4">Funciones</h2></div>
+    <div class="hint">Activá solamente lo que tenga sentido para ese producto. Cada opción seleccionada se exigirá como función real.</div>
+    <div class="tog-list" id="toggles">
+      <label class="tog-row on"><span class="tog-copy"><b>Lectura por capítulos</b><small>Contenido real y navegable</small></span><span class="sw"><input type="checkbox" checked data-fn="Contenido del ebook navegable dentro de la app, organizado por capítulos o secciones reales."><span class="slider"></span></span></label>
+      <label class="tog-row on"><span class="tog-copy"><b>Modo noche / día</b><small>Inicia siempre en el modo elegido abajo</small></span><span class="sw"><input type="checkbox" checked data-key="theme-toggle" data-fn="Interruptor funcional para alternar entre modo claro y oscuro, manteniendo como modo inicial obligatorio el definido por el usuario."><span class="slider"></span></span></label>
+      <label class="tog-row on"><span class="tog-copy"><b>Tarjetas de conceptos</b><small>Expandibles al tocar</small></span><span class="sw"><input type="checkbox" checked data-fn="Tarjetas de conceptos clave expandibles al tocar, basadas en contenido real."><span class="slider"></span></span></label>
+      <label class="tog-row on"><span class="tog-copy"><b>Preguntas de reflexión</b><small>Respuestas guardadas</small></span><span class="sw"><input type="checkbox" checked data-fn="Preguntas de reflexión con campo de respuesta y guardado local persistente."><span class="slider"></span></span></label>
+      <label class="tog-row on"><span class="tog-copy"><b>Citas destacadas</b><small>Frases reales del contenido</small></span><span class="sw"><input type="checkbox" checked data-fn="Citas destacadas extraídas del contenido real, sin inventar frases atribuidas al autor."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Ruleta interactiva</b><small>Jugable de verdad</small></span><span class="sw"><input type="checkbox" data-fn="Ruleta animada jugable que gira y entrega resultados relacionados con el contenido."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Raspadita</b><small>Revela contenido al interactuar</small></span><span class="sw"><input type="checkbox" data-fn="Tarjetas tipo raspadita realmente interactivas para revelar contenido."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Quiz / Trivia</b><small>Preguntas, puntaje y resultado</small></span><span class="sw"><input type="checkbox" data-fn="Quiz de opción múltiple con puntaje, feedback y resultado final."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Test con resultado</b><small>Perfil o resultado personalizado</small></span><span class="sw"><input type="checkbox" data-fn="Test interactivo con cálculo real de un resultado o perfil personalizado al final."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Diario / Notas</b><small>Espacio editable y guardado</small></span><span class="sw"><input type="checkbox" data-fn="Diario o notas editables con guardado local persistente."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Checklist interactivo</b><small>Progreso y guardado</small></span><span class="sw"><input type="checkbox" data-fn="Checklist interactivo con progreso, reinicio y guardado local."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Calculadora</b><small>Adaptada al contenido</small></span><span class="sw"><input type="checkbox" data-fn="Calculadora funcional y pertinente al contenido, con validación de entradas y resultados claros."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Tracker / Seguimiento</b><small>Avances día a día</small></span><span class="sw"><input type="checkbox" data-fn="Tracker de seguimiento con registro y guardado local persistente."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Flashcards</b><small>Tarjetas para repasar</small></span><span class="sw"><input type="checkbox" data-fn="Flashcards interactivas que muestran frente y dorso con conceptos reales."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Carrusel de lecciones</b><small>Deslizable y táctil</small></span><span class="sw"><input type="checkbox" data-fn="Carrusel deslizable y táctil de lecciones o ideas clave."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Temporizador</b><small>Cronómetro funcional</small></span><span class="sw"><input type="checkbox" data-fn="Temporizador o cronómetro funcional y pertinente al tema, con iniciar, pausar y reiniciar."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Logros y medallas</b><small>Progreso motivacional</small></span><span class="sw"><input type="checkbox" data-fn="Sistema de logros o medallas desbloqueables basado en acciones reales del usuario y con guardado local."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Armador / Configurador</b><small>Recomendación personalizada</small></span><span class="sw"><input type="checkbox" data-fn="Configurador interactivo que hace preguntas y genera una recomendación personalizada basada únicamente en el contenido disponible."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Checklist de seguridad</b><small>Buenas prácticas del tema</small></span><span class="sw"><input type="checkbox" data-fn="Checklist específico de seguridad o buenas prácticas, solo si el contenido real permite construirlo sin inventar indicaciones."><span class="slider"></span></span></label>
+      <label class="tog-row"><span class="tog-copy"><b>Tarjetas para imprimir</b><small>Copiables / imprimibles</small></span><span class="sw"><input type="checkbox" data-fn="Tarjetas o etiquetas imprimibles relevantes al tema, con contenido real y botón funcional para copiar cuando sea útil."><span class="slider"></span></span></label>
+    </div>
+  </section>
+
+  <section class="step" aria-labelledby="paso5">
+    <div class="step-hd"><div class="step-n">5</div><h2 class="step-t" id="paso5">Idioma y diseño</h2></div>
+
+    <label class="lbl" for="idioma">Idioma + variante regional</label>
+    <select class="inp" id="idioma">
+      <option value="es-neutral" selected>Español neutro · Latinoamérica</option>
+      <option value="es-ar">Español · Argentina</option>
+      <option value="es-co-tu">Español · Colombia (tú)</option>
+      <option value="es-co-usted">Español · Colombia (usted)</option>
+      <option value="es-mx">Español · México</option>
+      <option value="es-es">Español · España</option>
+      <option value="en">Inglés</option>
+      <option value="pt-br">Portugués · Brasil</option>
+      <option value="it">Italiano</option>
+      <option value="fr">Francés</option>
+    </select>
+    <div class="hard">🌎 La variante elegida se convierte en una regla de código y redacción. “Español” ya no se interpreta automáticamente como Argentina.</div>
+
+    <div class="two">
+      <div><label class="lbl" for="modoVisual">Modo visual inicial</label><select class="inp" id="modoVisual"><option value="claro" selected>Claro</option><option value="oscuro">Oscuro</option></select></div>
+      <div><label class="lbl" for="onda">Personalidad visual</label><select class="inp" id="onda"><option value="minimalista" selected>Minimalista / limpia</option><option value="colorida">Colorida / dinámica</option><option value="galaxia">Tecnológica / galaxia</option><option value="lujosa">Lujosa / premium</option></select></div>
+    </div>
+    <div class="hint">El modo visual manda sobre la personalidad. “Claro + Premium” debe seguir arrancando claro.</div>
+
+    <label class="lbl">Colores exactos de marca</label>
+    <div class="colors">
+      <div class="color-box"><label class="lbl" for="c1">Principal</label><div class="color-line"><input type="color" class="cp" id="c1" value="#164A73" aria-label="Color principal"><input class="inp hex" id="c1hex" value="#164A73" inputmode="text" maxlength="7" aria-label="HEX principal"></div></div>
+      <div class="color-box"><label class="lbl" for="c2">Acento</label><div class="color-line"><input type="color" class="cp" id="c2" value="#00C8FF" aria-label="Color de acento"><input class="inp hex" id="c2hex" value="#00C8FF" inputmode="text" maxlength="7" aria-label="HEX de acento"></div></div>
+    </div>
+    <label class="lbl" for="marca">Nombre o marca</label>
+    <input class="inp" id="marca" maxlength="140" placeholder="Ej: Lina Mejía · Bienestar Interior">
+    <div class="hard">🎨 Los HEX son identidad de marca. Nunca habilitan a cambiar el modo claro/oscuro seleccionado.</div>
+
+    <div class="summary" aria-live="polite">
+      <div><small>Idioma</small><strong id="sum-lang">Español neutro · Latinoamérica</strong></div>
+      <div><small>Modo inicial</small><strong id="sum-mode">Claro</strong></div>
+      <div><small>Principal</small><strong id="sum-c1">#164A73</strong></div>
+      <div><small>Acento</small><strong id="sum-c2">#00C8FF</strong></div>
+    </div>
+  </section>
+
+  <button type="button" class="gen" id="btn-generar">✦ Generar mi Prompt de Ventas V2</button>
+
+  <section class="output" id="output" aria-live="polite">
+    <div class="out-t">✓ Prompt V2 listo</div>
+    <div class="out-s">Incluye blindaje de idioma, atributo <code>lang</code>, tema inicial, HEX exactos, compatibilidad móvil y auditoría final.</div>
+    <div class="pbox"><pre id="prompt-txt"></pre></div>
+    <div class="acts">
+      <button type="button" id="btn-copiar">📋 Copiar prompt</button>
+      <button type="button" class="pri" id="btn-claude">Abrir Claude.ai ↗</button>
+    </div>
+    <div class="copy-status" id="copy-status" aria-live="polite"></div>
+  </section>
+
+  <footer class="foot">FILMARTE · DC · VENTAS · <b>Digital Carmelo</b> · Generador V2</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+const $ = (id) => document.getElementById(id);
+let nicho = 'otro';
+let tono = 'Motivacional y directo';
+let pdfTexto = '';
+let pdfNombre = '';
+let pdfTruncado = false;
+let pdfScriptSource = '';
+const PDF_MAX_CHARS = 60000;
+
+const LANG = {
+  'es-neutral': {label:'Español neutro · Latinoamérica'},
+  'es-ar': {label:'Español · Argentina'},
+  'es-co-tu': {label:'Español · Colombia (tú)'},
+  'es-co-usted': {label:'Español · Colombia (usted)'},
+  'es-mx': {label:'Español · México'},
+  'es-es': {label:'Español · España'},
+  'en': {label:'Inglés'},
+  'pt-br': {label:'Portugués · Brasil'},
+  'it': {label:'Italiano'},
+  'fr': {label:'Francés'}
+};
+const MODE = {claro:{label:'Claro'}, oscuro:{label:'Oscuro'}};
+
+function setPressed(group, active){
+  group.querySelectorAll('.opt').forEach(btn => {
+    const on = btn === active;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+$('nicho').querySelectorAll('.opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setPressed($('nicho'), btn);
+    nicho = btn.dataset.v;
+    setColor('c1', btn.dataset.c1);
+    setColor('c2', btn.dataset.c2);
+  });
+});
+
+$('tono').querySelectorAll('.opt').forEach(btn => {
+  btn.addEventListener('click', () => {
+    setPressed($('tono'), btn);
+    tono = btn.dataset.v;
+  });
+});
+
+$('toggles').querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  const row = cb.closest('.tog-row');
+  const sync = () => row.classList.toggle('on', cb.checked);
+  cb.addEventListener('change', sync);
+  sync();
+});
+
+function normalizeHex(value){
+  let v = String(value || '').trim().toUpperCase();
+  if(!v.startsWith('#')) v = '#' + v;
+  return /^#[0-9A-F]{6}$/.test(v) ? v : null;
+}
+
+function setColor(id, value){
+  const normalized = normalizeHex(value);
+  if(!normalized) return false;
+  $(id).value = normalized;
+  $(id + 'hex').value = normalized;
+  updateSummary();
+  return true;
+}
+
+[['c1','c1hex'],['c2','c2hex']].forEach(([pickerId,hexId]) => {
+  $(pickerId).addEventListener('input', () => setColor(pickerId, $(pickerId).value));
+  $(hexId).addEventListener('change', () => {
+    const old = $(pickerId).value.toUpperCase();
+    if(!setColor(pickerId, $(hexId).value)){
+      $(hexId).value = old;
+      $('copy-status').textContent = '⚠️ Usá un HEX de 6 dígitos, por ejemplo #164A73.';
+      setTimeout(() => { if($('copy-status').textContent.startsWith('⚠️')) $('copy-status').textContent=''; }, 2600);
+    }
+  });
+});
+
+function updateSummary(){
+  const lang = LANG[$('idioma').value];
+  $('sum-lang').textContent = lang.label;
+  $('sum-mode').textContent = MODE[$('modoVisual').value].label;
+  $('sum-c1').textContent = $('c1').value.toUpperCase();
+  $('sum-c2').textContent = $('c2').value.toUpperCase();
+}
+$('idioma').addEventListener('change', updateSummary);
+$('modoVisual').addEventListener('change', updateSummary);
+updateSummary();
+
+function loadScript(url, timeoutMs=12000){
+  return new Promise((resolve,reject) => {
+    const s = document.createElement('script');
+    let settled = false;
+    const timer = setTimeout(() => {
+      if(settled) return;
+      settled = true;
+      s.remove();
+      reject(new Error('timeout'));
+    }, timeoutMs);
+    s.src = url;
+    s.async = true;
+    s.onload = () => { if(settled) return; settled=true; clearTimeout(timer); resolve(url); };
+    s.onerror = () => { if(settled) return; settled=true; clearTimeout(timer); s.remove(); reject(new Error('load-error')); };
+    document.head.appendChild(s);
+  });
+}
+
+async function ensurePdfJs(){
+  if(window.pdfjsLib) return window.pdfjsLib;
+  const sources = [
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js'
+  ];
+  let lastError;
+  for(const src of sources){
+    try{
+      pdfScriptSource = await loadScript(src);
+      if(window.pdfjsLib) break;
+    }catch(err){ lastError = err; }
+  }
+  if(!window.pdfjsLib) throw lastError || new Error('pdfjs-unavailable');
+  const worker = pdfScriptSource.includes('jsdelivr')
+    ? 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js'
+    : 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = worker;
+  return window.pdfjsLib;
+}
+
+async function readPDFFile(file){
+  const st = $('pdf-status');
+  if(!file) return;
+  if(file.type && file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')){
+    st.className='pdf-status error'; st.textContent='Elegí un archivo PDF.'; return;
+  }
+  pdfTexto=''; pdfNombre=file.name; pdfTruncado=false;
+  $('pdf-fn').textContent='📎 ' + file.name;
+  st.className='pdf-status loading'; st.textContent='Preparando lector PDF...';
+  try{
+    const pdfjs = await ensurePdfJs();
+    st.textContent='Leyendo PDF...';
+    const data = await file.arrayBuffer();
+    const doc = await pdfjs.getDocument({data}).promise;
+    let text = '';
+    for(let p=1; p<=doc.numPages; p++){
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      const line = content.items.map(item => item.str || '').join(' ').replace(/\s+/g,' ').trim();
+      if(line) text += `\n\n[Página ${p}]\n${line}`;
+      st.textContent=`Leyendo PDF... ${p}/${doc.numPages}`;
+    }
+    text = text.replace(/\n{3,}/g,'\n\n').trim();
+    if(!text){
+      st.className='pdf-status error';
+      st.textContent='Este PDF no tiene texto seleccionable (puede ser escaneado). Describí el contenido a mano.';
+      return;
+    }
+    if(text.length > PDF_MAX_CHARS){ text = text.slice(0, PDF_MAX_CHARS); pdfTruncado=true; }
+    pdfTexto = text;
+    if(!$('tema').value.trim()){
+      const clean = text.replace(/\[Página \d+\]/g,'').replace(/\s+/g,' ').trim();
+      $('tema').value = clean.slice(0,700) + (clean.length>700 ? '…' : '');
+    }
+    st.className='pdf-status done';
+    st.textContent=`✓ PDF leído: ${doc.numPages} pág. · ${text.length.toLocaleString()} caracteres${pdfTruncado?' · contenido recortado para el prompt':''}`;
+  }catch(err){
+    console.error('PDF error:', err);
+    pdfTexto='';
+    st.className='pdf-status error';
+    st.textContent='No pudimos leer el PDF. Revisá tu conexión o describí el contenido a mano.';
+  }
+}
+
+$('pdf-in').addEventListener('change', e => readPDFFile(e.target.files && e.target.files[0]));
+const drop = $('pdf-drop');
+['dragenter','dragover'].forEach(type => drop.addEventListener(type, e => {e.preventDefault(); drop.classList.add('drag');}));
+['dragleave','drop'].forEach(type => drop.addEventListener(type, e => {e.preventDefault(); drop.classList.remove('drag');}));
+drop.addEventListener('drop', e => { const file=e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if(file) readPDFFile(file); });
+drop.addEventListener('keydown', e => { if(e.key==='Enter' || e.key===' '){e.preventDefault(); $('pdf-in').click();} });
+
+const MODULE_NAMES = [
+  'Lectura por capítulos o secciones','Modo noche/día','Tarjetas de conceptos','Preguntas de reflexión','Frases destacadas',
+  'Ruleta interactiva','Rasca y gana / tarjeta sorpresa','Quiz o trivia','Test con resultado','Diario / notas personales',
+  'Checklist interactivo','Calculadora','Tracker / seguimiento','Flashcards','Carrusel de lecciones','Temporizador',
+  'Logros / insignias','Configurador personalizado','Checklist de seguridad','Etiquetas imprimibles'
+];
+
+// Contratos de implementación: se envían junto al nombre para que el generador
+// respete tanto la función como la representación esperada del módulo.
+const MODULE_SPECS = [
+  'Contenido real navegable por capítulos o secciones, con títulos, texto y pasos del material fuente.',
+  'Interruptor funcional claro/oscuro que arranca en el modo elegido y conserva la preferencia.',
+  'Tarjetas de conceptos reales, visibles y expandibles al tocar para mostrar su explicación.',
+  'Preguntas de reflexión con campos editables, guardado local y restauración al recargar.',
+  'Frases realmente extraídas del contenido fuente, presentadas como citas destacadas sin atribuciones inventadas.',
+  'Ruleta visual circular real: rueda dividida en segmentos visibles, puntero fijo, botón de giro, animación de rotación y resultado destacado. Debe poder girarse repetidamente y los resultados deben relacionarse con el contenido. No reemplazar por una tarjeta aleatoria, selector de texto ni lista de opciones.',
+  'Raspadita visual real: superficie cubierta que se revela al arrastrar o tocar, con contenido/sorpresa relacionado al tema y estado de revelado funcional.',
+  'Quiz de opción múltiple con preguntas basadas en el contenido, selección de respuestas, feedback, puntaje acumulado y resultado final.',
+  'Test interactivo con cálculo real de perfil o resultado personalizado a partir de las respuestas y pantalla final explicativa.',
+  'Diario o notas editable con guardado local persistente, indicador de guardado y restauración al volver a abrir.',
+  'Checklist funcional con casillas, progreso visible, opción de reiniciar y guardado local persistente.',
+  'Calculadora pertinente al tema, con entradas validadas, cálculo real, unidades/etiquetas claras y resultado visible.',
+  'Tracker de seguimiento con registro de avances por día o ítem, progreso visible, guardado local y recuperación de datos.',
+  'Flashcards reales con frente y dorso: cada tarjeta debe darse vuelta al tocar y usar conceptos reales del contenido.',
+  'Carrusel táctil de lecciones o ideas clave con controles anterior/siguiente, indicador de posición y navegación por deslizamiento.',
+  'Temporizador o cronómetro funcional y pertinente al tema, con iniciar, pausar, continuar y reiniciar.',
+  'Logros o medallas visuales que se desbloquean por acciones reales del usuario y conservan el progreso local.',
+  'Configurador interactivo: preguntas relevantes, botón para generar y recomendación personalizada basada solo en el contenido disponible.',
+  'Checklist específico de seguridad o buenas prácticas del tema, solo con información sustentada por el material, con progreso, éxito al completar y reinicio.',
+  'Tarjetas o etiquetas imprimibles relevantes al tema, con contenido real, diseño claro y botón funcional para copiar o imprimir.'
+];
+
+function collectPayload(){
+  const nm=$('nombre').value.trim();
+  const tm=$('tema').value.trim();
+  if(!nm || !tm) return {error:'Completá el nombre y el tema/público de la Mini App.'};
+  const checked=[...$('toggles').querySelectorAll('input[type="checkbox"]')];
+  const functions=checked.map((cb,i)=>cb.checked
+    ? `${MODULE_NAMES[i]} — ${MODULE_SPECS[i] || cb.dataset.fn || 'Implementación completa y funcional, basada en el contenido real.'}`
+    : null
+  ).filter(Boolean);
+  return {data:{
+    nombre:nm,
+    tema:tm,
+    extra:$('extra').value.trim(),
+    marca:$('marca').value.trim() || 'Mi marca',
+    nicho,
+    tono,
+    idioma:$('idioma').value,
+    modoVisual:$('modoVisual').value,
+    onda:$('onda').value,
+    c1:$('c1').value.toUpperCase(),
+    c2:$('c2').value.toUpperCase(),
+    pdfTexto,
+    pdfNombre,
+    pdfTruncado,
+    functions
+  }};
+}
+
+async function generate(){
+  const payload=collectPayload();
+  if(payload.error){
+    alert(payload.error);
+    const first=!$('nombre').value.trim() ? $('nombre') : $('tema');
+    first.focus();
+    return;
+  }
+  const btn=$('btn-generar');
+  const old=btn.textContent;
+  btn.disabled=true; btn.classList.add('busy'); btn.textContent='Verificando acceso y generando…';
+  $('copy-status').textContent='';
+  try{
+    const {data, error}=await sb.functions.invoke('generate-miniapp-prompt-v2',{body:payload.data});
+    if(error){
+      const status=error?.context?.status;
+      if(status===401){ await sb.auth.signOut(); showLogin('Tu sesión venció. Ingresá nuevamente.',true); return; }
+      if(status===403){ showBlocked(); return; }
+      throw error;
+    }
+    if(!data || !data.prompt) throw new Error(data?.error || 'Respuesta inválida');
+    $('prompt-txt').textContent=data.prompt;
+    $('output').classList.add('show');
+    $('output').scrollIntoView({behavior:'smooth',block:'start'});
+  }catch(err){
+    console.error('generate error',err);
+    $('copy-status').textContent='No pudimos generar el prompt. Revisá tu conexión e intentá nuevamente.';
+  }finally{
+    btn.disabled=false; btn.classList.remove('busy'); btn.textContent=old;
+  }
+}
+
+async function copyPrompt(){
+  const text=$('prompt-txt').textContent;
+  if(!text) return;
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      const ta=document.createElement('textarea');
+      ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      const ok=document.execCommand('copy'); ta.remove();
+      if(!ok) throw new Error('copy-failed');
+    }
+    $('copy-status').textContent='✓ Prompt copiado.';
+  }catch(err){
+    $('copy-status').textContent='No se pudo copiar automáticamente. Seleccioná el prompt y copialo manualmente.';
+  }
+}
+
+$('btn-generar').addEventListener('click', generate);
+$('btn-copiar').addEventListener('click', copyPrompt);
+$('btn-claude').addEventListener('click', () => window.open('https://claude.ai','_blank','noopener,noreferrer'));
+
+const SUPABASE_URL='https://rkkulnehklzqqmffvaqz.supabase.co';
+const SUPABASE_KEY='sb_publishable_tKfKztMCb7iwDEIUdrgszA_qzPSPLZo';
+if(!window.supabase || !window.supabase.createClient){
+  document.getElementById('auth-msg').textContent='No pudimos cargar el acceso seguro. Revisá tu conexión y recargá la página.';
+  document.getElementById('auth-msg').className='auth-msg error';
+  return;
+}
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+
+const authShell=$('auth-shell'), generatorApp=$('generator-app');
+const loginPanel=$('login-panel'), passwordPanel=$('password-panel'), blockedPanel=$('blocked-panel');
+function msg(id,text,type=''){const el=$(id); el.textContent=text; el.className='auth-msg'+(type?' '+type:'');}
+function setPanels(which){
+  loginPanel.hidden=which!=='login'; passwordPanel.hidden=which!=='password'; blockedPanel.hidden=which!=='blocked';
+  authShell.hidden=which==='app'; generatorApp.hidden=which!=='app';
+}
+function showLogin(text='',isError=false){setPanels('login'); if(text) msg('auth-msg',text,isError?'error':'ok');}
+function showBlocked(){setPanels('blocked');}
+function showPassword(){setPanels('password');}
+async function verifyAccess(session){
+  if(!session?.user){showLogin(); return false;}
+  const {data,error}=await sb.from('generator_access').select('active,product').eq('user_id',session.user.id).maybeSingle();
+  if(error){showLogin('No pudimos verificar tu acceso. Intentá nuevamente.',true); return false;}
+  if(!data || data.active!==true || data.product!=='generador-mini-apps'){showBlocked(); return false;}
+  $('user-email').textContent=session.user.email || 'Usuario';
+  setPanels('app');
+  return true;
+}
+function isPasswordFlow(){
+  const u=location.href;
+  return /type=(invite|recovery)/.test(u) || /[?&]code=/.test(location.search);
+}
+async function bootAuth(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(session && isPasswordFlow()){showPassword(); return;}
+  if(session){await verifyAccess(session); return;}
+  showLogin();
+}
+
+$('btn-login').addEventListener('click',async()=>{
+  const email=$('auth-email').value.trim(); const password=$('auth-password').value;
+  if(!email || !password){msg('auth-msg','Completá email y contraseña.','error'); return;}
+  const b=$('btn-login'); b.disabled=true; b.classList.add('busy'); msg('auth-msg','Ingresando…');
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  b.disabled=false; b.classList.remove('busy');
+  if(error){msg('auth-msg','Email o contraseña incorrectos.','error'); return;}
+  await verifyAccess(data.session);
+});
+$('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')$('btn-login').click();});
+
+$('btn-forgot').addEventListener('click',async()=>{
+  const email=$('auth-email').value.trim();
+  if(!email){msg('auth-msg','Escribí primero tu email.','error'); $('auth-email').focus(); return;}
+  const redirectTo=location.origin+location.pathname;
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error){msg('auth-msg','No pudimos enviar el correo de recuperación.','error'); return;}
+  msg('auth-msg','Te enviamos un email para crear una nueva contraseña.','ok');
+});
+
+$('btn-set-password').addEventListener('click',async()=>{
+  const a=$('new-password').value, b=$('new-password-2').value;
+  if(a.length<8){msg('password-msg','La contraseña debe tener al menos 8 caracteres.','error'); return;}
+  if(a!==b){msg('password-msg','Las contraseñas no coinciden.','error'); return;}
+  const btn=$('btn-set-password'); btn.disabled=true; btn.classList.add('busy');
+  const {error}=await sb.auth.updateUser({password:a});
+  btn.disabled=false; btn.classList.remove('busy');
+  if(error){msg('password-msg','No pudimos guardar la contraseña. Pedí una nueva invitación.','error'); return;}
+  history.replaceState({},document.title,location.pathname);
+  msg('password-msg','Contraseña creada. Verificando tu acceso…','ok');
+  const {data:{session}}=await sb.auth.getSession();
+  await verifyAccess(session);
+});
+
+async function logout(){await sb.auth.signOut(); $('output').classList.remove('show'); $('prompt-txt').textContent=''; showLogin('Sesión cerrada.');}
+$('btn-logout').addEventListener('click',logout);
+$('btn-blocked-logout').addEventListener('click',logout);
+
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if(event==='PASSWORD_RECOVERY'){showPassword(); return;}
+  if(event==='SIGNED_OUT'){showLogin(); return;}
+  if(event==='SIGNED_IN' && session){
+    if(isPasswordFlow()){showPassword(); return;}
+    await verifyAccess(session);
+  }
+});
+
+window.__generatorV2 = {collectPayload, readPDFFile, updateSummary, normalizeHex};
+bootAuth();
+})();
+</script>
 </body>
 </html>
