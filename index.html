@@ -424,30 +424,50 @@ const MODULE_NAMES = [
   'Logros / insignias','Configurador personalizado','Checklist de seguridad','Etiquetas imprimibles'
 ];
 
-// Contratos de implementación: se envían junto al nombre para que el generador
-// respete tanto la función como la representación esperada del módulo.
 const MODULE_SPECS = [
   'Contenido real navegable por capítulos o secciones, con títulos, texto y pasos del material fuente.',
   'Interruptor funcional claro/oscuro que arranca en el modo elegido y conserva la preferencia.',
   'Tarjetas de conceptos reales, visibles y expandibles al tocar para mostrar su explicación.',
   'Preguntas de reflexión con campos editables, guardado local y restauración al recargar.',
-  'Frases realmente extraídas del contenido fuente, presentadas como citas destacadas sin atribuciones inventadas.',
+  'Frases extraídas del contenido fuente, presentadas como citas destacadas sin atribuciones inventadas.',
   'Ruleta visual circular real: rueda dividida en segmentos visibles, puntero fijo, botón de giro, animación de rotación y resultado destacado. Debe poder girarse repetidamente y los resultados deben relacionarse con el contenido. No reemplazar por una tarjeta aleatoria, selector de texto ni lista de opciones.',
-  'Raspadita visual real: superficie cubierta que se revela al arrastrar o tocar, con contenido/sorpresa relacionado al tema y estado de revelado funcional.',
+  'Raspadita visual real: superficie cubierta que se revela al arrastrar o tocar, con contenido o sorpresa relacionado al tema.',
   'Quiz de opción múltiple con preguntas basadas en el contenido, selección de respuestas, feedback, puntaje acumulado y resultado final.',
   'Test interactivo con cálculo real de perfil o resultado personalizado a partir de las respuestas y pantalla final explicativa.',
-  'Diario o notas editable con guardado local persistente, indicador de guardado y restauración al volver a abrir.',
+  'Diario o notas editable con guardado local persistente y restauración al volver a abrir.',
   'Checklist funcional con casillas, progreso visible, opción de reiniciar y guardado local persistente.',
-  'Calculadora pertinente al tema, con entradas validadas, cálculo real, unidades/etiquetas claras y resultado visible.',
+  'Calculadora pertinente al tema, con entradas validadas, cálculo real, unidades o etiquetas claras y resultado visible.',
   'Tracker de seguimiento con registro de avances por día o ítem, progreso visible, guardado local y recuperación de datos.',
   'Flashcards reales con frente y dorso: cada tarjeta debe darse vuelta al tocar y usar conceptos reales del contenido.',
   'Carrusel táctil de lecciones o ideas clave con controles anterior/siguiente, indicador de posición y navegación por deslizamiento.',
   'Temporizador o cronómetro funcional y pertinente al tema, con iniciar, pausar, continuar y reiniciar.',
   'Logros o medallas visuales que se desbloquean por acciones reales del usuario y conservan el progreso local.',
-  'Configurador interactivo: preguntas relevantes, botón para generar y recomendación personalizada basada solo en el contenido disponible.',
+  'Configurador interactivo con preguntas relevantes y recomendación personalizada basada solo en el contenido disponible.',
   'Checklist específico de seguridad o buenas prácticas del tema, solo con información sustentada por el material, con progreso, éxito al completar y reinicio.',
   'Tarjetas o etiquetas imprimibles relevantes al tema, con contenido real, diseño claro y botón funcional para copiar o imprimir.'
 ];
+
+function selectedModuleContracts(){
+  return [...$('toggles').querySelectorAll('input[type="checkbox"]')]
+    .map((cb,i)=>cb.checked ? `${MODULE_NAMES[i]}: ${MODULE_SPECS[i] || cb.dataset.fn || 'Implementación completa y funcional basada en el contenido real.'}` : null)
+    .filter(Boolean);
+}
+
+function enrichGeneratedPrompt(prompt){
+  const contracts=selectedModuleContracts();
+  if(!contracts.length) return prompt;
+  const block=[
+    '',
+    '═══════════════════════════════════════',
+    'CONTRATOS VISUALES Y FUNCIONALES DE LOS MÓDULOS — OBLIGATORIOS',
+    '═══════════════════════════════════════',
+    'No alcanza con nombrar o simular estos módulos. Implementá cada contrato exactamente y hacé que se vea como el componente esperado:',
+    ...contracts.map((item,i)=>`${i+1}. ${item}`),
+    'Regla de control: si un módulo no cumple su representación visual y su interacción específica, la app está incompleta.'
+  ].join('\n');
+  const marker='═══════════════════════════════\nDISEÑO VISUAL';
+  return prompt.includes(marker) ? prompt.replace(marker,`${block}\n\n${marker}`) : `${prompt}\n${block}`;
+}
 
 function collectPayload(){
   const nm=$('nombre').value.trim();
@@ -455,7 +475,7 @@ function collectPayload(){
   if(!nm || !tm) return {error:'Completá el nombre y el tema/público de la Mini App.'};
   const checked=[...$('toggles').querySelectorAll('input[type="checkbox"]')];
   const functions=checked.map((cb,i)=>cb.checked
-    ? `${MODULE_NAMES[i]} — ${MODULE_SPECS[i] || cb.dataset.fn || 'Implementación completa y funcional, basada en el contenido real.'}`
+    ? `${MODULE_NAMES[i]} — ${MODULE_SPECS[i] || cb.dataset.fn || 'Implementación completa y funcional basada en el contenido real.'}`
     : null
   ).filter(Boolean);
   return {data:{
@@ -498,7 +518,7 @@ async function generate(){
       throw error;
     }
     if(!data || !data.prompt) throw new Error(data?.error || 'Respuesta inválida');
-    $('prompt-txt').textContent=data.prompt;
+    $('prompt-txt').textContent=enrichGeneratedPrompt(data.prompt);
     $('output').classList.add('show');
     $('output').scrollIntoView({behavior:'smooth',block:'start'});
   }catch(err){
