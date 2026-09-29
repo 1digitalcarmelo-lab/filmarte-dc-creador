@@ -46,6 +46,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .userbar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(0,212,255,.07);border:1px solid var(--border);border-radius:10px;padding:9px 11px;margin-bottom:10px}.userbar span{font-size:12px;color:#B8D8EE;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.userbar button{border:1px solid var(--border);background:var(--bg2);color:#fff;border-radius:8px;padding:7px 10px;cursor:pointer;flex:0 0 auto}
 .access-card{border-color:rgba(255,123,167,.35)}.access-card h2{font-size:20px;margin-bottom:8px}.access-card p{color:var(--muted);font-size:13px;line-height:1.55}
 .busy{opacity:.62;pointer-events:none}
+.auth-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:1.4rem 0;color:var(--muted);font-size:14px}
+.auth-loading .spin{width:18px;height:18px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--cyan);animation:authspin .8s linear infinite}
+@keyframes authspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.auth-loading .spin{animation:none}}
+.pw-wrap{position:relative}.pw-wrap .inp{padding-right:52px}
+.pw-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px;touch-action:manipulation}
+.pw-eye:hover,.pw-eye:focus-visible{color:var(--cyan)}.pw-eye svg{width:20px;height:20px}
 
 @media(max-width:560px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.two,.colors,.summary{grid-template-columns:1fr}.wrap{padding-left:.8rem;padding-right:.8rem}.step{padding:1rem}}
 @media(max-width:360px){.grid2,.grid4{grid-template-columns:1fr}.acts{flex-direction:column}.acts button{flex-basis:auto}}
@@ -58,13 +65,14 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="logo">FILMARTE <span class="dc">· DC ·</span> <span class="ventas">VENTAS</span></div>
       <p>Acceso personal al Generador de Mini Apps</p>
     </div>
-    <div id="login-panel">
+    <div id="loading-panel" class="auth-loading" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span>Verificando tu acceso…</div>
+    <div id="login-panel" hidden>
       <h1 class="auth-title">Ingresá a tu Generador</h1>
       <p class="auth-sub">Usá el mismo email con el que recibiste tu acceso.</p>
       <label class="lbl" for="auth-email">Email</label>
       <input class="inp" id="auth-email" type="email" autocomplete="email" placeholder="tu@email.com">
       <label class="lbl" for="auth-password">Contraseña</label>
-      <input class="inp" id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="Tu contraseña">
+      <div class="pw-wrap"><input class="inp" id="auth-password" type="password" autocomplete="current-password" minlength="8" placeholder="Tu contraseña"><button type="button" class="pw-eye" data-for="auth-password" aria-label="Mostrar contraseña" aria-pressed="false"></button></div>
       <div class="auth-actions"><button type="button" class="primary" id="btn-login">Ingresar</button></div>
       <button type="button" class="auth-link" id="btn-forgot">Olvidé mi contraseña</button>
       <div class="auth-msg" id="auth-msg" aria-live="polite"></div>
@@ -73,9 +81,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <h1 class="auth-title">Creá tu contraseña</h1>
       <p class="auth-sub">Elegí una contraseña de al menos 8 caracteres para terminar de activar tu acceso.</p>
       <label class="lbl" for="new-password">Nueva contraseña</label>
-      <input class="inp" id="new-password" type="password" autocomplete="new-password" minlength="8" placeholder="Mínimo 8 caracteres">
+      <div class="pw-wrap"><input class="inp" id="new-password" type="password" autocomplete="new-password" minlength="8" placeholder="Mínimo 8 caracteres"><button type="button" class="pw-eye" data-for="new-password" aria-label="Mostrar contraseña" aria-pressed="false"></button></div>
       <label class="lbl" for="new-password-2">Repetila</label>
-      <input class="inp" id="new-password-2" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la contraseña">
+      <div class="pw-wrap"><input class="inp" id="new-password-2" type="password" autocomplete="new-password" minlength="8" placeholder="Repetí la contraseña"><button type="button" class="pw-eye" data-for="new-password-2" aria-label="Mostrar contraseña" aria-pressed="false"></button></div>
       <div class="auth-actions"><button type="button" class="primary" id="btn-set-password">Guardar contraseña</button></div>
       <div class="auth-msg" id="password-msg" aria-live="polite"></div>
     </div>
@@ -202,8 +210,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
       <div class="color-box"><label class="lbl" for="c1">Principal</label><div class="color-line"><input type="color" class="cp" id="c1" value="#164A73" aria-label="Color principal"><input class="inp hex" id="c1hex" value="#164A73" inputmode="text" maxlength="7" aria-label="HEX principal"></div></div>
       <div class="color-box"><label class="lbl" for="c2">Acento</label><div class="color-line"><input type="color" class="cp" id="c2" value="#00C8FF" aria-label="Color de acento"><input class="inp hex" id="c2hex" value="#00C8FF" inputmode="text" maxlength="7" aria-label="HEX de acento"></div></div>
     </div>
-    <label class="lbl" for="marca">Nombre o marca</label>
-    <input class="inp" id="marca" maxlength="140" placeholder="Ej: Lina Mejía · Bienestar Interior">
+    <label class="lbl" for="marca">Nombre o marca <span aria-hidden="true">*</span></label>
+    <input class="inp" id="marca" maxlength="140" required aria-required="true" placeholder="Ej: Lina Mejía · Bienestar Interior">
+    <div class="hint">Obligatorio. Es la única marca que va a aparecer en la Mini App que entregues.</div>
     <div class="hard">🎨 Los HEX son identidad de marca. Nunca habilitan a cambiar el modo claro/oscuro seleccionado.</div>
 
     <div class="summary" aria-live="polite">
@@ -473,6 +482,7 @@ function collectPayload(){
   const nm=$('nombre').value.trim();
   const tm=$('tema').value.trim();
   if(!nm || !tm) return {error:'Completá el nombre y el tema/público de la Mini App.'};
+  if(!$('marca').value.trim()) return {error:'Escribí el nombre o marca que va a llevar tu Mini App (es la marca que verá tu cliente).', field:'marca'};
   const checked=[...$('toggles').querySelectorAll('input[type="checkbox"]')];
   const functions=checked.map((cb,i)=>cb.checked
     ? `${MODULE_NAMES[i]} — ${MODULE_SPECS[i] || cb.dataset.fn || 'Implementación completa y funcional basada en el contenido real.'}`
@@ -482,7 +492,7 @@ function collectPayload(){
     nombre:nm,
     tema:tm,
     extra:$('extra').value.trim(),
-    marca:$('marca').value.trim() || 'Mi marca',
+    marca:$('marca').value.trim(),
     nicho,
     tono,
     idioma:$('idioma').value,
@@ -501,7 +511,7 @@ async function generate(){
   const payload=collectPayload();
   if(payload.error){
     alert(payload.error);
-    const first=!$('nombre').value.trim() ? $('nombre') : $('tema');
+    const first=payload.field ? $(payload.field) : (!$('nombre').value.trim() ? $('nombre') : $('tema'));
     first.focus();
     return;
   }
@@ -510,7 +520,12 @@ async function generate(){
   btn.disabled=true; btn.classList.add('busy'); btn.textContent='Verificando acceso y generando…';
   $('copy-status').textContent='';
   try{
-    const {data, error}=await sb.functions.invoke('generate-miniapp-prompt-v2',{body:payload.data});
+    let {data, error}=await sb.functions.invoke('generate-miniapp-prompt-v2',{body:payload.data});
+    if(error && error?.context?.status===401){
+      // Probablemente el token venció mientras la pestaña estaba en segundo plano: renovar y reintentar.
+      const {error:refreshErr}=await sb.auth.refreshSession();
+      if(!refreshErr) ({data, error}=await sb.functions.invoke('generate-miniapp-prompt-v2',{body:payload.data}));
+    }
     if(error){
       const status=error?.context?.status;
       if(status===401){ await sb.auth.signOut(); showLogin('Tu sesión venció. Ingresá nuevamente.',true); return; }
@@ -555,6 +570,8 @@ $('btn-claude').addEventListener('click', () => window.open('https://claude.ai',
 const SUPABASE_URL='https://rkkulnehklzqqmffvaqz.supabase.co';
 const SUPABASE_KEY='sb_publishable_tKfKztMCb7iwDEIUdrgszA_qzPSPLZo';
 if(!window.supabase || !window.supabase.createClient){
+  document.getElementById('loading-panel').hidden=true;
+  document.getElementById('login-panel').hidden=false;
   document.getElementById('auth-msg').textContent='No pudimos cargar el acceso seguro. Revisá tu conexión y recargá la página.';
   document.getElementById('auth-msg').className='auth-msg error';
   return;
@@ -564,31 +581,61 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSe
 const authShell=$('auth-shell'), generatorApp=$('generator-app');
 const loginPanel=$('login-panel'), passwordPanel=$('password-panel'), blockedPanel=$('blocked-panel');
 function msg(id,text,type=''){const el=$(id); el.textContent=text; el.className='auth-msg'+(type?' '+type:'');}
+const loadingPanel=$('loading-panel');
+let currentView='loading', verifiedUserId=null, verifying=null;
 function setPanels(which){
+  currentView=which;
+  loadingPanel.hidden=which!=='loading';
   loginPanel.hidden=which!=='login'; passwordPanel.hidden=which!=='password'; blockedPanel.hidden=which!=='blocked';
   authShell.hidden=which==='app'; generatorApp.hidden=which!=='app';
 }
 function showLogin(text='',isError=false){setPanels('login'); if(text) msg('auth-msg',text,isError?'error':'ok');}
 function showBlocked(){setPanels('blocked');}
 function showPassword(){setPanels('password');}
-async function verifyAccess(session){
-  if(!session?.user){showLogin(); return false;}
-  const {data,error}=await sb.from('generator_access').select('active,product').eq('user_id',session.user.id).maybeSingle();
-  if(error){showLogin('No pudimos verificar tu acceso. Intentá nuevamente.',true); return false;}
-  if(!data || data.active!==true || data.product!=='generador-mini-apps'){showBlocked(); return false;}
-  $('user-email').textContent=session.user.email || 'Usuario';
-  setPanels('app');
-  return true;
+async function queryAccess(userId){
+  let last;
+  for(let attempt=0; attempt<3; attempt++){
+    const {data,error}=await sb.from('generator_access').select('active,product').eq('user_id',userId).maybeSingle();
+    if(!error) return {data};
+    last=error;
+    await new Promise(r=>setTimeout(r,600*(attempt+1)));
+  }
+  return {error:last};
+}
+function verifyAccess(session){
+  if(!session?.user){verifiedUserId=null; showLogin(); return Promise.resolve(false);}
+  // Ya verificado este mismo usuario y la app está abierta: no volver a pedir nada.
+  if(verifiedUserId===session.user.id && currentView==='app') return Promise.resolve(true);
+  if(verifying) return verifying;
+  verifying=(async()=>{
+    const {data,error}=await queryAccess(session.user.id);
+    if(error){
+      // Si la app ya estaba abierta, un corte de red momentáneo no te saca.
+      if(currentView==='app') return true;
+      showLogin('No pudimos verificar tu acceso. Revisá tu conexión e intentá nuevamente.',true); return false;
+    }
+    if(!data || data.active!==true || data.product!=='generador-mini-apps'){verifiedUserId=null; showBlocked(); return false;}
+    verifiedUserId=session.user.id;
+    $('user-email').textContent=session.user.email || 'Usuario';
+    setPanels('app');
+    return true;
+  })().finally(()=>{verifying=null;});
+  return verifying;
 }
 function isPasswordFlow(){
   const u=location.href;
   return /type=(invite|recovery)/.test(u) || /[?&]code=/.test(location.search);
 }
 async function bootAuth(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(session && isPasswordFlow()){showPassword(); return;}
-  if(session){await verifyAccess(session); return;}
-  showLogin();
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session && isPasswordFlow()){showPassword(); return;}
+    if(session){await verifyAccess(session); return;}
+    showLogin();
+  }catch(err){
+    console.error('boot auth',err);
+    showLogin('No pudimos verificar tu acceso. Recargá la página.',true);
+  }
 }
 
 $('btn-login').addEventListener('click',async()=>{
@@ -597,7 +644,11 @@ $('btn-login').addEventListener('click',async()=>{
   const b=$('btn-login'); b.disabled=true; b.classList.add('busy'); msg('auth-msg','Ingresando…');
   const {data,error}=await sb.auth.signInWithPassword({email,password});
   b.disabled=false; b.classList.remove('busy');
-  if(error){msg('auth-msg','Email o contraseña incorrectos.','error'); return;}
+  if(error){
+    const net=/fetch|network/i.test(error.message||'') || error.status===0;
+    msg('auth-msg', net ? 'No pudimos conectar. Revisá tu conexión e intentá de nuevo.' : 'Email o contraseña incorrectos.','error'); return;
+  }
+  msg('auth-msg','Verificando tu acceso…');
   await verifyAccess(data.session);
 });
 $('auth-password').addEventListener('keydown',e=>{if(e.key==='Enter')$('btn-login').click();});
@@ -625,17 +676,31 @@ $('btn-set-password').addEventListener('click',async()=>{
   await verifyAccess(session);
 });
 
-async function logout(){await sb.auth.signOut(); $('output').classList.remove('show'); $('prompt-txt').textContent=''; showLogin('Sesión cerrada.');}
+async function logout(){verifiedUserId=null; await sb.auth.signOut(); $('output').classList.remove('show'); $('prompt-txt').textContent=''; showLogin('Sesión cerrada.');}
 $('btn-logout').addEventListener('click',logout);
 $('btn-blocked-logout').addEventListener('click',logout);
 
-sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='PASSWORD_RECOVERY'){showPassword(); return;}
-  if(event==='SIGNED_OUT'){showLogin(); return;}
-  if(event==='SIGNED_IN' && session){
-    if(isPasswordFlow()){showPassword(); return;}
-    await verifyAccess(session);
-  }
+// Importante: no llamar a Supabase directamente dentro de este callback (puede trabarse).
+// Se difiere con setTimeout, como recomienda la documentación de Supabase.
+sb.auth.onAuthStateChange((event,session)=>{
+  setTimeout(()=>{
+    if(event==='PASSWORD_RECOVERY'){showPassword(); return;}
+    if(event==='SIGNED_OUT'){verifiedUserId=null; if(currentView!=='login') showLogin(); return;}
+    if(event==='SIGNED_IN' && session){
+      if(isPasswordFlow()){showPassword(); return;}
+      // Al volver a la pestaña Supabase re-emite SIGNED_IN: si ya estás adentro, no pasa nada.
+      verifyAccess(session);
+    }
+  },0);
+});
+
+document.querySelectorAll('.pw-eye').forEach(btn=>{
+  const input=$(btn.dataset.for);
+  const eye='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const eyeOff='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  const render=()=>{const shown=input.type==='text'; btn.innerHTML=shown?eyeOff:eye; btn.setAttribute('aria-pressed',shown?'true':'false'); btn.setAttribute('aria-label',shown?'Ocultar contraseña':'Mostrar contraseña');};
+  btn.addEventListener('click',()=>{input.type=input.type==='password'?'text':'password'; render(); input.focus();});
+  render();
 });
 
 window.__generatorV2 = {collectPayload, readPDFFile, updateSummary, normalizeHex};
